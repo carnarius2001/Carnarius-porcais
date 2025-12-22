@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arquivo Carnarius</title>
+  <style>
+    :root {
+      --stone: #0a0a0a;
+      --blood: #5e0000;
+      --parchment: #bdaf91;
+      --gold: #8c7647;
+    }
+
+    body {
+      background-color: var(--stone);
+      background-image: url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+      color: var(--parchment);
+      font-family: serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      perspective: 2000px;
+    }
+
+    .header-area {
+      text-align: center;
+      padding: 20px;
+      transition: opacity 1s;
+    }
+
+    h1.alert { color: var(--blood); font-size: 1.4rem; margin: 0; }
+    .sub-alert { color: var(--gold); font-size: 0.8rem; text-transform: uppercase; margin-bottom: 15px; }
+    .intro-text { font-size: 0.9rem; line-height: 1.5; max-width: 300px; margin: 0 auto; opacity: 0.7; }
+
+    /* --- LIVRO --- */
+    #main-book {
+      position: relative;
+      width: 180px;
+      height: 260px;
+      margin-top: 20px;
+      transition: transform 2.5s cubic-bezier(0.7, 0, 0.3, 1), opacity 1.5s;
+      z-index: 10;
+    }
+
+    .book-cover {
+      width: 100%;
+      height: 100%;
+      background: #2b0505;
+      background-image: url("https://www.transparenttextures.com/patterns/leather.png");
+      border: 2px solid var(--gold);
+      border-radius: 0 5px 5px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 50px rgba(0,0,0,1);
+      cursor: pointer;
+    }
+
+    .book-cover h3 { color: var(--gold); font-size: 1.1rem; text-align: center; pointer-events: none; }
+
+    /* --- OVERLAY E BOTÕES --- */
+    #overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.95);
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .btn-row { 
+      display: flex; 
+      gap: 40px; 
+      opacity: 0;
+      transition: opacity 0.8s;
+    }
+
+    .choice-btn {
+      background: none;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 20px 40px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      font-family: serif;
+    }
+
+    /* --- ANIMAÇÃO DE ENTRADA --- */
+    .zoom-active {
+      transform: scale(40) rotateY(-10deg) !important;
+      opacity: 0;
+    }
+
+  </style>
+</head>
+<body>
+
+  <audio id="audioPergunta" src="pergunta.mp3"></audio>
+  <audio id="audioSucesso" src="sucesso.mp3"></audio>
+
+  <div class="header-area" id="header">
+    <h1 class="alert">⚠ ALERTA CERIMONIAL ⚠</h1>
+    <h2 class="sub-alert">O Chamado da Carne foi iniciado</h2>
+    <p class="intro-text">
+      Os registros encontrados apontam que <strong>Carnarius Porcais</strong>, foi uma das primeiras divindades a serem adoradas pela humanidade. 
+      Seus registros remetem a civilizações ancestrais no coração do Oriente Médio.
+    </p>
+  </div>
+
+  <div id="main-book" onclick="startRitual()">
+    <div class="book-cover">
+      <h3>Arquivo<br>Carnarius</h3>
+    </div>
+  </div>
+
+  <div id="overlay">
+    <div class="btn-row" id="choice-buttons">
+      <button class="choice-btn" onclick="confirmDestiny(true)">SIM</button>
+      <button class="choice-btn" onclick="confirmDestiny(false)">NÃO</button>
+    </div>
+  </div>
+
+  <script>
+    const audioPergunta = document.getElementById('audioPergunta');
+    const audioSucesso = document.getElementById('audioSucesso');
+    const book = document.getElementById('main-book');
+    const overlay = document.getElementById('overlay');
+    const buttons = document.getElementById('choice-buttons');
+    const header = document.getElementById('header');
+
+    function startRitual() {
+      // Abre o overlay escuro
+      overlay.style.display = 'flex';
+      
+      // Toca o áudio da pergunta
+      audioPergunta.play().catch(e => console.log("Erro ao tocar áudio. Interaja com a página antes."));
+
+      // Mostra os botões após um tempo (ajuste conforme a duração do seu áudio)
+      // Exemplo: se o áudio tem 4 segundos, usamos 4000ms
+      audioPergunta.onended = () => {
+        buttons.style.opacity = "1";
+      };
+    }
+
+    function confirmDestiny(accepted) {
+      buttons.style.opacity = "0";
+
+      if (accepted) {
+        // Toca o áudio de sucesso
+        audioSucesso.play();
+
+        audioSucesso.onended = () => {
+          // Inicia a transição visual
+          overlay.style.backgroundColor = "transparent";
+          header.style.opacity = "0";
+          book.classList.add('zoom-active');
+          
+          setTimeout(() => {
+            document.body.style.backgroundColor = "black";
+            
+            // REDIRECIONAMENTO:
+            // Certifique-se de que o arquivo "livro.html" esteja na mesma pasta que este.
+            window.location.href = "livro.html"; 
+            
+          }, 2000); // 2 segundos é o tempo da animação de zoom antes de trocar de página
+        };
+      } else {
+        location.reload();
+      }
+    }
+
+  </script>
+
+</body>
+</html>

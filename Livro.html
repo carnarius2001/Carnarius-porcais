@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>O Livro de Carnarius</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=MedievalSharp&family=Uncial+Antiqua&display=swap');
+
+    :root {
+      --stone: #050505;
+      --blood: #7a0000;
+      --parchment: #d4c3a3;
+      --gold: #917b50;
+      --ink: #1a1a1a;
+      --width: 300px; 
+    }
+
+    body {
+      background-color: var(--stone);
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      perspective: 2500px;
+      overflow: hidden;
+      font-family: 'MedievalSharp', serif;
+    }
+
+    .book-anchor {
+      position: relative;
+      width: var(--width);
+      height: 480px;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .focus-center { transform: translateX(0); }
+    .focus-left   { transform: translateX(298px); }  
+    .focus-right  { transform: translateX(-9px); } 
+
+    .leaf {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transform-origin: left;
+      transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+      transform-style: preserve-3d;
+      z-index: 1;
+    }
+
+    .front, .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      box-sizing: border-box;
+      border-radius: 2px 5px 5px 2px;
+    }
+
+    .back { transform: rotateY(180deg); }
+
+    .paper-style {
+      background: var(--parchment);
+      background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+      padding: 30px;
+      outline: 1px solid var(--gold);
+      outline-offset: -7px;
+      color: var(--ink);
+      box-shadow: inset 0 0 50px rgba(0,0,0,0.2);
+      overflow-y: auto;
+      hyphens: auto;
+      -webkit-hyphens: auto;
+      word-break: break-word;
+      text-justify: inter-word;
+    }
+
+    .capa-personalizada { 
+      background: #3d0a0a; 
+      background-image: url('capa.png'); 
+      background-size: cover;
+      display: flex; 
+      flex-direction: column;
+      align-items: center; 
+      justify-content: center;
+      box-shadow: 10px 0 20px rgba(0,0,0,0.5);
+    }
+
+    h3 { color: var(--gold); font-family: 'Uncial Antiqua'; text-align: center; font-size: 1.5rem; }
+    h4 { color: var(--blood); font-family: 'Uncial Antiqua'; font-size: 1.2rem; margin: 0 0 15px 0; text-align: center; }
+    p { text-align: justify; font-size: 0.95rem; line-height: 1.45; margin: 0 0 10px 0; }
+    
+    .capitular::first-letter {
+      float: left; 
+      font-size: 3.5rem; 
+      line-height: 3rem; 
+      padding-right: 8px; 
+      color: var(--blood); 
+      font-weight: bold;
+    }
+
+    .flipped { transform: rotateY(-180deg) translateZ(1px); }
+
+    .controls {
+      position: fixed;
+      bottom: 40px;
+      display: flex;
+      gap: 30px;
+      z-index: 100;
+    }
+
+    .nav-btn {
+      background: rgba(0,0,0,0.85);
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 12px 28px;
+      font-family: 'MedievalSharp';
+      cursor: pointer;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="book-anchor" id="book">
+    
+    <div class="leaf" id="leaf0">
+      <div class="front capa-personalizada"></div>
+      <div class="back paper-style">
+        <h4>Prefácio</h4>
+        <p>"Antes dos deuses mais antigos, havia o vazio, e antes de haver o vazio, havia um mar de monstros."</p>
+      </div>
+    </div>
+
+    <div class="leaf" id="leaf1">
+      <div class="front paper-style">
+        <h4>Pastos Quantus Vazus</h4>
+        <p class="capitular">Sombrio foi o passado onde diversas guerras turbilhavam como bolhas em uma panela quente, constantes e irregulares, mas sempre perceptíveis a alcançar mais do ambiente à sua volta, como uma floresta de destruição conectada pelas raízes: uma floresta destrutiva.</p>
+        <p>O universo, segundo relatos, era como um grande nevoeiro cinzento de partículas flamejantes, que traçavam caminhos impossíveis de descrever.</p>
+      </div>
+      <div class="back paper-style">
+        <p>Séculos se passaram e a situação, com o tempo, foi se acalmando até que chegasse em uma nova era: a era porcal.</p>
+        <p>Os primeiros registros do fazendeiro surgem nessa época, quando muitos começaram a notar a construção de uma fazenda nos pastos quantus vazus; sua arquitetura era deslumbrante e extremamente detalhada, com adornos que pareciam contar uma história do passado, cujo fora esquecida.</p>
+      </div>
+    </div>
+
+    <div class="leaf" id="leaf2">
+      <div class="front paper-style" style="display: flex; align-items: center; justify-content: center;">
+        <h3 style="color: var(--blood); border: 2px solid var(--blood); padding: 20px; text-transform: uppercase;">
+          [ Informações Restritas ]
+        </h3>
+      </div>
+      <div class="back paper-style"></div>
+    </div>
+
+  </div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prevBtn">Voltar</button>
+    <button class="nav-btn" id="nextBtn">Avançar</button>
+  </div>
+
+  <script>
+    const book = document.getElementById('book');
+    const leaves = [
+      document.getElementById('leaf0'), 
+      document.getElementById('leaf1'), 
+      document.getElementById('leaf2')
+    ];
+    
+    let tracker = 0; 
+    const maxTracker = 4; // Ajustado para 3 folhas
+
+    function update() {
+      leaves.forEach((leaf, index) => {
+        if (index === Math.floor((tracker - 1) / 2)) {
+          leaf.style.zIndex = 10;
+        } else if (index === Math.floor(tracker / 2)) {
+          leaf.style.zIndex = 5;
+        } else {
+          leaf.style.zIndex = 1;
+        }
+      });
+
+      if (tracker === 0) {
+        book.className = "book-anchor focus-center";
+      } else if (tracker % 2 !== 0) {
+        book.className = "book-anchor focus-left";
+      } else {
+        book.className = "book-anchor focus-right";
+      }
+
+      leaves.forEach((leaf, index) => {
+        const threshold = 1 + (index * 2);
+        if (tracker >= threshold) leaf.classList.add('flipped');
+        else leaf.classList.remove('flipped');
+      });
+
+      document.getElementById('prevBtn').disabled = (tracker === 0);
+      document.getElementById('nextBtn').disabled = (tracker === maxTracker);
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', () => { if (tracker < maxTracker) { tracker++; update(); } });
+    document.getElementById('prevBtn').addEventListener('click', () => { if (tracker > 0) { tracker--; update(); } });
+
+    update();
+  </script>
+</body>
+</html>
