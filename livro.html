@@ -46,9 +46,8 @@
       width: 100%;
       height: 100%;
       transform-origin: left;
-      transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+      transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1);
       transform-style: preserve-3d;
-      z-index: 1;
     }
 
     .front, .back {
@@ -57,18 +56,27 @@
       height: 100%;
       backface-visibility: hidden;
       box-sizing: border-box;
-      border-radius: 2px 5px 5px 2px;
+      border-radius: 2px 10px 10px 2px;
+      background-color: var(--parchment);
+      box-shadow: inset 3px 0 10px rgba(0,0,0,0.1);
     }
 
-    .back { transform: rotateY(180deg); }
+    .back { 
+      transform: rotateY(180deg); 
+    }
+
+    .leaf.flipped { 
+      transform: rotateY(-180deg) scale(1.02); 
+    }
 
     .paper-style {
       background: var(--parchment);
-      background-image: url("https://www.transparenttextures.com/patterns/paper-fibers.png");
+      background-image: url("folha.png");
       padding: 30px;
       outline: 1px solid var(--gold);
       outline-offset: -7px;
       color: var(--ink);
+      background-image: linear-gradient(to right, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 10%, rgba(0,0,0,0) 90%, rgba(0,0,0,0.05) 100%), url("folha.png");
       box-shadow: inset 0 0 50px rgba(0,0,0,0.2);
       overflow-y: auto;
       hyphens: auto;
@@ -77,15 +85,41 @@
       text-justify: inter-word;
     }
 
+    .full-page-img {
+      padding: 7px !important; 
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .full-page-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain; 
+      mix-blend-mode: multiply;
+      filter: contrast(1.1);
+    }
+
     .capa-personalizada { 
       background: #3d0a0a; 
-      background-image: url('capa.png'); 
+      background-image: url('capa1.png'); 
       background-size: cover;
       display: flex; 
       flex-direction: column;
       align-items: center; 
       justify-content: center;
       box-shadow: 10px 0 20px rgba(0,0,0,0.5);
+      border-radius: 2px 5px 5px 2px;
+    }
+
+    /* Estilo para a contracapa (verso do livro) */
+    .contracapa {
+      background: #3d0a0a;
+      background-image: url('s7.png'); /* Você pode mudar para capa2.png se tiver uma imagem diferente */
+      background-size: cover;
+      box-shadow: -10px 0 20px rgba(0,0,0,0.5);
+      border-radius: 5px 2px 2px 5px;
     }
 
     h3 { color: var(--gold); font-family: 'Uncial Antiqua'; text-align: center; font-size: 1.5rem; }
@@ -100,8 +134,6 @@
       color: var(--blood); 
       font-weight: bold;
     }
-
-    .flipped { transform: rotateY(-180deg) translateZ(1px); }
 
     .controls {
       position: fixed;
@@ -120,10 +152,18 @@
       cursor: pointer;
       border-radius: 4px;
       text-transform: uppercase;
+      transition: all 0.3s;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      background: var(--gold);
+      color: black;
     }
   </style>
 </head>
 <body>
+
+  <audio id="pageSound" src="Pag.opus" preload="auto"></audio>
 
   <div class="book-anchor" id="book">
     
@@ -131,32 +171,98 @@
       <div class="front capa-personalizada"></div>
       <div class="back paper-style">
         <h4>Prefácio</h4>
-        <p>"Antes dos deuses mais antigos, havia o vazio, e antes de haver o vazio, havia um mar de monstros."</p>
+        <p>"Antes dos deuses mais antigos, havia o vazio, e antes de haver o vazio, havia um mar de monstros." <br><br> Desde que começamos a pensar, a existência à nossa volta tem nos maravilhado com vossos mistérios, com os quais poderíamos morrer sem saber, mas escolhemos o contrário: escolhemos descobrir e entender tudo que existe.</p>
       </div>
     </div>
 
     <div class="leaf" id="leaf1">
       <div class="front paper-style">
-        <h4>Pastos Quantus Vazus</h4>
+        <h4>Primeiros seres</h4>
         <p class="capitular">Sombrio foi o passado onde diversas guerras turbilhavam como bolhas em uma panela quente, constantes e irregulares, mas sempre perceptíveis a alcançar mais do ambiente à sua volta, como uma floresta de destruição conectada pelas raízes: uma floresta destrutiva.</p>
-        <p>O universo, segundo relatos, era como um grande nevoeiro cinzento de partículas flamejantes, que traçavam caminhos impossíveis de descrever.</p>
+        <p>O universo, segundo relatos, era como um grande nevoeiro cinzento de partículas flamejantes, que traçavam caminhos impossíveis de descrição.</p>
       </div>
       <div class="back paper-style">
-        <p>Séculos se passaram e a situação, com o tempo, foi se acalmando até que chegasse em uma nova era: a era porcal.</p>
-        <p>Os primeiros registros do fazendeiro surgem nessa época, quando muitos começaram a notar a construção de uma fazenda nos pastos quantus vazus; sua arquitetura era deslumbrante e extremamente detalhada, com adornos que pareciam contar uma história do passado, cujo fora esquecida.</p>
+        <p>Não se sabe o tempo exato em que ocorreu, mas em algum momento as coisas mudaram e chegaram a um padrão cósmico; uma força forte surgiu, e da desordem surgiu uma ordem fraca. Os seres dessa época mudaram suas próprias percepções sobre a existência ao redor deles; eles começaram a pensar, não eram mais vontades destrutivas que se moviam apenas para se expandir cada vez mais, não, não mais.</p>
+        <p>Suas primeiras ações foram a formação e aprendizagem da comunicação entre eles.</p>
       </div>
     </div>
 
     <div class="leaf" id="leaf2">
-      <div class="front paper-style" style="display: flex; align-items: center; justify-content: center;">
-        <h3 style="color: var(--blood); border: 2px solid var(--blood); padding: 20px; text-transform: uppercase;">
-          [ Informações Restritas ]
-        </h3>
+      <div class="front paper-style">
+        <p>Começaram com o som e evoluíram para os símbolos e, posteriormente, a escrita. Esta que evoluiu e se ramificou em diversos estilos.</p>
+        <p>Essa evolução constante foi crucial para a formação da sociedade FRACTUS e suas cidades; junto disso, o universo também se reformulou com o tempo, formando cinco forças da ordem forte:</p>
+        <p>1ª Força: Nada pode ser completamente destruído, apenas reformulado em outra existência.</p>
+        <p>2ª Força: Nada é totalmente eterno; tudo que nasce tende a se fragmentar e morrer.</p>
       </div>
-      <div class="back paper-style"></div>
+      <div class="back paper-style">
+        <p>3ª Força: Tudo está em constante movimento e transformação, nada permanece o mesmo.</p>
+        <p>4ª Força: O cosmo sempre segue em uma linha em busca do equilíbrio.</p>
+        <p>5ª Força: Nada surge do nada.</p>
+        <p>Os seres se adaptaram a essas ordens do universo, as entenderam e se aprimoraram. Assim, foi criada a Assembleia dos Construtores: seres que foram responsáveis por criar novas extensões de terras utilizando os antigos selos.</p>
+      </div>
     </div>
 
-  </div>
+    <div class="leaf" id="leaf3">
+      <div class="front paper-style">
+        <h4>Selos</h4>
+        <p> Estes surgiram de um problema que apareceu com o tempo: o uso de vozes criava diversas ondulações e inconsistências, que geravam terrenos irregulares. Por isso, em busca de uma solução, foram criados os fios da criação, ou, selos. </p> 
+        <p> Os selos foram surgindo de acordo com a necessidade. Alguns necessitavam de apenas três deles, já outros, precisavam de uma multidão. Dependia da eficácia e alcance que desejavam obter. </p>
+      </div>
+      <div class="back paper-style full-page-img">
+        <img src="pag1.png">
+      </div>
+    </div>
+
+    <div class="leaf" id="leaf4">
+      <div class="front paper-style full-page-img">
+        <img src="pag2.png">
+      </div>
+      <div class="back paper-style full-page-img">
+        <img src="pag3.png">
+      </div>
+    </div>
+
+    <div class="leaf" id="leaf5">
+      <div class="front paper-style">
+        <h4> Pastos Quantus Vazus </h4>
+        <p> Após a formação dos selos, o vazio rapidamente se tornou uma lembrança distante. Mesmo que o ser mais rápido vivo corresse em qualquer direção, nunca chegaria à borda daquele novo mundo.</p>
+        <p> Assim deu-se início à segunda era: a Era Porcal.</p>
+        <p> Foi nesse meio tempo que surgiram os primeiros relatos do Fazendeiro, que mais tarde naquela era construiu a Fazenda, uma estrutura composta de matéria exótica com ornamentos que contavam uma história desconhecida. </p>
+      </div>
+      <div class="back paper-style">
+        <p>Segundo ele, aquela era uma história de um outro lugar, um lugar que, com o conhecimento daquela época, era impossível de existir. Após completar a construção da Fazenda, o Fazendeiro acolheu alguns seres, que posteriormente começaram a ser chamados de deuses — os primeiros deles.</p>
+        <p> A Fazenda havia sido construída nos Pastos Quantus Vazus, que ficavam na antiga província de Aratis. Ao seu redor ficavam as montanhas de Azut, um local que o Fazendeiro costumava visitar com bastante frequência.</p>
+      </div>
+    </div>
+
+    <div class="leaf" id="leaf6">
+      <div class="front paper-style">
+        <p> Ninguém nunca soube o que ele fazia lá, nem mesmo os que estavam sob sua proteção. Ele foi um ser que carregou bastante mistério, que quase nunca compartilhava qualquer tipo de informação sobre o que fazia; nem mesmo o propósito da Fazenda foi revelado.</p>
+        <p> E assim foi, até que ele desapareceu sem deixar rastros. Apenas um livro foi encontrado em seu aposento; com uma capa escura que emitia pequenos brilhos, estampado no centro, havia apenas uma frase. </p>
+      </div>
+      <div class="back paper-style">
+        <p> O significado, como sempre, não se sabe. Tudo que se pode ter certeza é de que, no momento em que o livro foi aberto, o universo nasceu. Um pequeno ponto saiu do livro em formato oval, como se dele viesse a nascer algo de extrema importância.</p>
+        <p> Foi assim que a Guerra do Pré-Nascimento deu início. Como os deuses não sabiam o que fazer com o objeto, eles acabaram se dividindo em dois grupos: os que o usariam para ganhar mais poder e aqueles que decidiram esperar. </p> 
+      </div>
+    </div>
+
+    <div class="leaf" id="leaf7">
+      <div class="front paper-style">
+        <p> A guerra foi avassaladora e extremamente sangrenta, mas todos concordam com uma coisa: se Carnarius Porcais não tivesse vencido, nunca poderíamos ter descoberto pelo que o Fazendeiro procurava, e nunca teríamos visto esse belo e misterioso universo.</p>
+      </div>
+      <div class="back paper-style full-page-img">
+        <img src="s8.png">
+      </div>
+    </div>
+
+    <div class="leaf" id="leaf8">
+      <div class="front paper-style">
+        <p style="text-align: center; margin-top: 50%;">FIM DO RELATO DE CARNARIUS</p>
+      </div>
+      <div class="back contracapa"></div>
+    </div>
+
+  </div> 
 
   <div class="controls">
     <button class="nav-btn" id="prevBtn">Voltar</button>
@@ -165,26 +271,28 @@
 
   <script>
     const book = document.getElementById('book');
+    const pageSound = document.getElementById('pageSound');
     const leaves = [
       document.getElementById('leaf0'), 
       document.getElementById('leaf1'), 
-      document.getElementById('leaf2')
+      document.getElementById('leaf2'),
+      document.getElementById('leaf3'),
+      document.getElementById('leaf4'),
+      document.getElementById('leaf5'),
+      document.getElementById('leaf6'),
+      document.getElementById('leaf7'),
+      document.getElementById('leaf8')
     ];
     
     let tracker = 0; 
-    const maxTracker = 4; // Ajustado para 3 folhas
+    const maxTracker = 18; // Atualizado para 9 folhas x 2
+
+    function playAudio() {
+      pageSound.currentTime = 0;
+      pageSound.play().catch(e => console.warn("Áudio bloqueado."));
+    }
 
     function update() {
-      leaves.forEach((leaf, index) => {
-        if (index === Math.floor((tracker - 1) / 2)) {
-          leaf.style.zIndex = 10;
-        } else if (index === Math.floor(tracker / 2)) {
-          leaf.style.zIndex = 5;
-        } else {
-          leaf.style.zIndex = 1;
-        }
-      });
-
       if (tracker === 0) {
         book.className = "book-anchor focus-center";
       } else if (tracker % 2 !== 0) {
@@ -193,18 +301,46 @@
         book.className = "book-anchor focus-right";
       }
 
+      const cutoff = tracker / 2;
+
       leaves.forEach((leaf, index) => {
         const threshold = 1 + (index * 2);
-        if (tracker >= threshold) leaf.classList.add('flipped');
-        else leaf.classList.remove('flipped');
+        
+        if (tracker >= threshold) {
+          leaf.classList.add('flipped');
+        } else {
+          leaf.classList.remove('flipped');
+        }
+
+        const isMoving = (tracker % 2 !== 0) && (Math.floor(tracker / 2) === index);
+
+        if (isMoving) {
+          leaf.style.zIndex = 100;
+        } else {
+          const distance = Math.abs(index - cutoff);
+          leaf.style.zIndex = 20 - Math.floor(distance * 2); 
+        }
       });
 
       document.getElementById('prevBtn').disabled = (tracker === 0);
       document.getElementById('nextBtn').disabled = (tracker === maxTracker);
     }
 
-    document.getElementById('nextBtn').addEventListener('click', () => { if (tracker < maxTracker) { tracker++; update(); } });
-    document.getElementById('prevBtn').addEventListener('click', () => { if (tracker > 0) { tracker--; update(); } });
+    document.getElementById('nextBtn').addEventListener('click', () => { 
+      if (tracker < maxTracker) { 
+        tracker++; 
+        update(); 
+        playAudio();
+      } 
+    });
+
+    document.getElementById('prevBtn').addEventListener('click', () => { 
+      if (tracker > 0) { 
+        tracker--; 
+        update(); 
+        playAudio();
+      } 
+    });
 
     update();
   </script>
